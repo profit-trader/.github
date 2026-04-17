@@ -1,0 +1,96 @@
+# Org-wide repository metadata configuration for profit-trader.
+# Edit this file and run `uv run scripts/update_repos.py --dry-run` to preview,
+# then `uv run scripts/update_repos.py` to apply.
+
+org: profit-trader
+
+# Applied to ALL repos unless overridden below.
+# Per-repo `topics` lists REPLACE (not append to) this default.
+defaults:
+  topics:
+    - profit-trader
+
+repos:
+  - name: profit-trader
+    description: "P.R.O.F.I.T. Trader stock trading analysis app — Visual Basic 6 core, C#/.NET database updater (PT DbUpdater), SQL Server/MySQL schemas, and PowerShell build tooling."
+    homepage: ""
+    topics:
+      - profit-trader
+      - visual-basic
+      - vb6
+      - csharp
+      - dotnet
+      - sql-server
+      - mysql
+      - stock-trading
+      - finance
+
+  - name: pt-market-data-pipeline
+    description: "Python pipeline that scrapes and aggregates GTR1-compatible market data (dividends, splits, IPOs, delistings, M&A) from Investing.com, NASDAQ, SEC EDGAR, and Yahoo Finance for Profit Trader."
+    homepage: "https://urban-adventure-o74wrqn.pages.github.io/"
+    topics:
+      - profit-trader
+      - python
+      - scraping
+      - market-data
+      - finance
+      - gtr1
+      - crsp
+      - uv
+
+  - name: handbook
+    description: "Internal engineering handbook for Profit Trader — VM setup, compiling/deployment guides, infrastructure docs, database replication, troubleshooting, and meeting notes. Built with MkDocs."
+    homepage: "https://animated-adventure-wwwg6lk.pages.github.io/"
+    topics:
+      - profit-trader
+      - documentation
+      - handbook
+      - mkdocs
+      - python
+
+  - name: .github
+    description: "Org-level GitHub configuration for profit-trader — profile README, community health files, default issue/PR templates, and org maintenance scripts."
+    topics:
+      - profit-trader
+      - github-config
+
+  - name: zeelotes.org
+    description: "Vanilla Forums fork (PHP/JavaScript/CSS) powering the zeelotes.org community forum for Profit Trader users."
+    homepage: "https://zeelotes.org/forum"
+    topics:
+      - profit-trader
+      - php
+      - javascript
+      - vanilla-forums
+      - forum
+      - zeelotes
+      - finance
+
+  - name: profit-trader-server
+    description: "Server-side scripts and supporting data for the Profit Trader hosting servers (win10-pt, asrock, zee-server) — scheduled tasks, database maintenance, and deployment utilities."
+    topics:
+      - profit-trader
+      - server
+      - backend
+      - devops
+
+  - name: profit-trader-web-scrapers
+    description: "Web scraping tools for collecting external financial data feeds used by Profit Trader."
+    topics:
+      - profit-trader
+      - python
+      - scraping
+      - market-data
+      - finance
+
+  - name: profit-trader-plugins-lk
+    description: "Profit Trader plugin set for LK — custom analysis and trading strategy plugins."
+    topics:
+      - profit-trader
+      - plugins
+
+  - name: profit-trader-plugins-ms
+    description: "Profit Trader plugin set for MS — custom analysis and trading strategy plugins."
+    topics:
+      - profit-trader
+      - plugins
