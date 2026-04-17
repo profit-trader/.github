@@ -29,8 +29,23 @@ CONFIG_FILE = Path(__file__).parent / "repo_config.yaml"
 
 
 def load_config(path: Path) -> dict:
-    with open(path) as f:
-        return yaml.safe_load(f)
+    try:
+        with open(path, encoding="utf-8") as f:
+            data = yaml.safe_load(f)
+    except FileNotFoundError:
+        print(f"ERROR: Config file not found: {path}", file=sys.stderr)
+        sys.exit(1)
+    except yaml.YAMLError as exc:
+        print(f"ERROR: Invalid YAML in config file {path}: {exc}", file=sys.stderr)
+        sys.exit(1)
+    except OSError as exc:
+        print(f"ERROR: Failed to read config file {path}: {exc}", file=sys.stderr)
+        sys.exit(1)
+
+    if not isinstance(data, dict):
+        print(f"ERROR: Config file must contain a top-level mapping: {path}", file=sys.stderr)
+        sys.exit(1)
+    return data
 
 
 def github_error_message(exc: GithubException) -> str:
@@ -106,7 +121,10 @@ def main() -> None:
         sys.exit(1)
 
     config = load_config(CONFIG_FILE)
-    org_name: str = config["org"]
+    org_name = config.get("org")
+    if not isinstance(org_name, str) or not org_name.strip():
+        print("ERROR: Config key 'org' is required and must be a non-empty string.", file=sys.stderr)
+        sys.exit(1)
     defaults: dict = config.get("defaults", {})
     repo_overrides: dict[str, dict] = {r["name"]: r for r in config.get("repos", [])}
 
