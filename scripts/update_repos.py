@@ -68,7 +68,7 @@ def update_repo(repo, config: dict, dry_run: bool) -> list[str]:
     changes = []
 
     desired_description = config.get("description")
-    desired_topics = sorted(config.get("topics", []))
+    desired_topics = sorted(config.get("topics", [])) if "topics" in config else None
     desired_homepage = config.get("homepage")
 
     current_description = repo.description or ""
@@ -78,7 +78,7 @@ def update_repo(repo, config: dict, dry_run: bool) -> list[str]:
     if desired_description is not None and current_description != desired_description:
         changes.append(f"  description: {current_description!r} → {desired_description!r}")
 
-    if desired_topics and current_topics != desired_topics:
+    if desired_topics is not None and current_topics != desired_topics:
         changes.append(f"  topics:      {current_topics} → {desired_topics}")
 
     if desired_homepage is not None and current_homepage != desired_homepage:
@@ -92,7 +92,7 @@ def update_repo(repo, config: dict, dry_run: bool) -> list[str]:
             kwargs["homepage"] = desired_homepage
         if kwargs:
             repo.edit(**kwargs)
-        if desired_topics:
+        if desired_topics is not None:
             repo.replace_topics(desired_topics)
 
     return changes
@@ -125,8 +125,30 @@ def main() -> None:
     if not isinstance(org_name, str) or not org_name.strip():
         print("ERROR: Config key 'org' is required and must be a non-empty string.", file=sys.stderr)
         sys.exit(1)
-    defaults: dict = config.get("defaults", {})
-    repo_overrides: dict[str, dict] = {r["name"]: r for r in config.get("repos", [])}
+
+    defaults = config.get("defaults", {})
+    if not isinstance(defaults, dict):
+        print("ERROR: Config key 'defaults' must be a mapping.", file=sys.stderr)
+        sys.exit(1)
+
+    repos_config = config.get("repos", [])
+    if not isinstance(repos_config, list):
+        print("ERROR: Config key 'repos' must be a list.", file=sys.stderr)
+        sys.exit(1)
+
+    repo_overrides: dict[str, dict] = {}
+    for i, repo_entry in enumerate(repos_config):
+        if not isinstance(repo_entry, dict):
+            print(f"ERROR: Config key 'repos[{i}]' must be a mapping.", file=sys.stderr)
+            sys.exit(1)
+        repo_name = repo_entry.get("name")
+        if not isinstance(repo_name, str) or not repo_name.strip():
+            print(
+                f"ERROR: Config key 'repos[{i}].name' is required and must be a non-empty string.",
+                file=sys.stderr,
+            )
+            sys.exit(1)
+        repo_overrides[repo_name] = repo_entry
 
     g = Github(auth=Auth.Token(token))
     try:
@@ -151,11 +173,8 @@ def main() -> None:
     total_changed = 0
     errors = 0
     for repo in repos:
-        # Merge defaults with per-repo overrides (overrides win)
+        # Apply org-wide defaults to every repo; per-repo overrides win.
         repo_config = {**defaults, **repo_overrides.get(repo.name, {})}
-        if not repo_config:
-            print(f"  SKIP    {repo.name}  (no config entry)")
-            continue
         try:
             changes = update_repo(repo, repo_config, dry_run=args.dry_run)
             if changes:

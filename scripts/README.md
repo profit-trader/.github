@@ -9,7 +9,7 @@ Updates repository descriptions and topics across the org from a central config 
 **Run (no install needed — requires [uv](https://docs.astral.sh/uv/)):**
 
 ```bash
-export GITHUB_TOKEN=ghp_...   # fine-grained PAT: org repo metadata read/write
+export GITHUB_TOKEN=<token>   # fine-grained PAT: org repo metadata read/write
 
 # Preview all changes
 uv run scripts/update_repos.py --dry-run
