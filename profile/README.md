@@ -1,14 +1,7 @@
 ## Profit Trader
 
-<!--
+Profit Trader is an organization focused on building tools and services for trading and market analysis. This team site is primarily used for internal project management and testing.
 
-**Here are some ideas to get you started:**
+### About
 
-🙋‍♀️ A short introduction - what is your organization all about?
-🌈 Contribution guidelines - how can the community get involved?
-👩‍💻 Useful resources - where can the community find your docs? Is there anything else the community should know?
-🍿 Fun facts - what does your team eat for breakfast?
-🧙 Remember, you can do mighty things with the power of [Markdown](https://docs.github.com/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)
--->
-
-Team site that is primarily used for internal project management and testing.
+The repositories in this organization contain projects related to trading utilities, automation, and research. All public code is released under the [MIT License](https://github.com/profit-trader/.github/blob/main/LICENSE).
